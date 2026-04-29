@@ -3,262 +3,685 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Supermonster — Track Grocery Prices, Scan Receipts, Save Money</title>
+    <title>Supermonster — Track food prices. Save as a household.</title>
+    <meta name="description" content="Scan any receipt, track food price changes, set household budgets, and level up your monster. Download Supermonster for iOS.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            color: #26200a;
-            background: #fdf6e3;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --yellow: #F2C506;
+            --yellow-light: #FFF8D6;
+            --dark: #1A1A2E;
+            --text: #1A1A2E;
+            --text-secondary: #6B7280;
+            --bg: #FFFFFF;
+            --bg-grey: #F7F7F8;
+            --max-width: 1100px;
+            --radius: 16px;
         }
 
-        /* Nav */
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            color: var(--text);
+            background: var(--bg);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ─── NAV ─── */
         nav {
-            padding: 24px 48px;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            background: rgba(255,255,255,0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+        }
+        .nav-inner {
+            max-width: var(--max-width);
+            margin: 0 auto;
+            padding: 16px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .nav-brand {
             display: flex;
             align-items: center;
             gap: 12px;
+            text-decoration: none;
+            color: var(--text);
         }
-        nav .logo { width: 36px; height: 36px; border-radius: 8px; }
-        nav .name { font-size: 18px; font-weight: 700; }
-
-        /* Hero */
-        .hero {
-            flex: 1;
+        .nav-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--yellow);
+            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 0 48px 60px;
-            max-width: 1200px;
-            margin: 0 auto;
-            width: 100%;
-            gap: 60px;
+            font-size: 22px;
         }
-        .hero-text { max-width: 520px; }
-        .hero-text h1 {
-            font-size: clamp(40px, 6vw, 64px);
+        .nav-brand span {
+            font-size: 18px;
+            font-weight: 800;
+        }
+        .nav-cta {
+            background: var(--dark);
+            color: #fff;
+            padding: 10px 24px;
+            border-radius: 100px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            transition: opacity 0.2s;
+        }
+        .nav-cta:hover { opacity: 0.85; }
+
+        /* ─── HERO ─── */
+        .hero {
+            text-align: center;
+            padding: 80px 24px 60px;
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+        .hero-icon {
+            width: 80px;
+            height: 80px;
+            background: var(--yellow);
+            border-radius: 20px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 42px;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 24px rgba(242,197,6,0.25);
+        }
+        .hero-label {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+        }
+        .hero h1 {
+            font-size: clamp(32px, 5vw, 56px);
             font-weight: 900;
-            line-height: 1.05;
-            letter-spacing: -1px;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
             margin-bottom: 20px;
         }
-        .hero-text h1 span { color: #d4a800; }
-        .hero-text p {
+        .hero p {
             font-size: 18px;
-            color: #8a7e5a;
-            line-height: 1.6;
-            margin-bottom: 36px;
+            color: var(--text-secondary);
+            max-width: 560px;
+            margin: 0 auto 36px;
+            line-height: 1.7;
         }
-        .cta {
-            display: inline-block;
-            background: #26200a;
-            color: #fdf6e3;
-            font-size: 16px;
-            font-weight: 600;
-            padding: 18px 36px;
-            border-radius: 50px;
-            text-decoration: none;
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .cta:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 24px rgba(38, 32, 10, 0.15);
-        }
-
-        /* Features */
-        .features {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 60px 48px;
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 32px;
-        }
-        .feature {
-            background: white;
-            border-radius: 16px;
-            padding: 28px;
-            box-shadow: 0 2px 12px rgba(0,0,0,0.04);
-            text-align: center;
-        }
-        .feature .icon { font-size: 32px; margin-bottom: 12px; }
-        .feature .feature-img {
-            width: 100px;
-            height: 100px;
-            object-fit: contain;
-            margin-bottom: 16px;
-        }
-        .feature .feature-img-row {
+        .store-badges {
             display: flex;
             justify-content: center;
-            gap: 8px;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+        .store-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: var(--dark);
+            color: #fff;
+            padding: 14px 28px;
+            border-radius: 12px;
+            text-decoration: none;
+            transition: opacity 0.2s;
+        }
+        .store-badge:hover { opacity: 0.85; }
+        .store-badge svg { width: 24px; height: 24px; fill: #fff; }
+        .store-badge-text { text-align: left; }
+        .store-badge-text small { font-size: 11px; opacity: 0.7; display: block; }
+        .store-badge-text strong { font-size: 16px; font-weight: 700; }
+
+        /* ─── APP SCREENSHOTS ─── */
+        .screenshots {
+            padding: 60px 24px;
+            max-width: 1200px;
+            margin: 0 auto;
+            overflow-x: auto;
+        }
+        .screenshots-row {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: nowrap;
+            min-width: min-content;
+        }
+        .phone-frame {
+            width: 220px;
+            flex-shrink: 0;
+            background: var(--bg-grey);
+            border-radius: 28px;
+            border: 3px solid #E5E7EB;
+            overflow: hidden;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.06);
+        }
+        .phone-notch {
+            height: 28px;
+            background: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .phone-notch-pill {
+            width: 60px;
+            height: 6px;
+            background: #E5E7EB;
+            border-radius: 3px;
+        }
+        .phone-content {
+            padding: 20px 16px 28px;
+            min-height: 380px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .phone-content .phone-emoji {
+            font-size: 48px;
             margin-bottom: 16px;
         }
-        .feature .feature-img-row img {
-            width: 56px;
-            height: 56px;
-            object-fit: contain;
+        .phone-content h3 {
+            font-size: 15px;
+            font-weight: 800;
+            margin-bottom: 8px;
+            color: var(--text);
         }
-        .feature h3 { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
-        .feature p { font-size: 14px; color: #8a7e5a; line-height: 1.5; }
-
-        /* Character */
-        .hero-character { flex-shrink: 0; }
-        .hero-character .monster {
-            width: clamp(240px, 30vw, 400px);
-            height: auto;
+        .phone-content p {
+            font-size: 12px;
+            color: var(--text-secondary);
+            line-height: 1.5;
         }
 
-        /* Footer */
-        footer {
-            padding: 24px 48px;
-            border-top: 1px solid #e8e0c0;
+        /* ─── FEATURES ─── */
+        .features {
+            padding: 80px 24px;
+            max-width: var(--max-width);
+            margin: 0 auto;
+        }
+        .features h2 {
+            font-size: clamp(28px, 4vw, 44px);
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 56px;
+            letter-spacing: -0.02em;
+        }
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+        .feature-card {
+            background: var(--bg-grey);
+            border-radius: var(--radius);
+            padding: 32px;
+            transition: transform 0.2s;
+        }
+        .feature-card:hover { transform: translateY(-2px); }
+        .feature-card h3 {
+            font-size: 18px;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+        .feature-card p {
+            font-size: 15px;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        .feature-card-img {
+            width: 100%;
+            height: 180px;
+            background: #E5E7EB;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 56px;
+        }
+
+        /* ─── TESTIMONIALS ─── */
+        .testimonials {
+            padding: 80px 24px;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            text-align: center;
+        }
+        .testimonials h2 {
+            font-size: clamp(28px, 4vw, 44px);
+            font-weight: 900;
+            margin-bottom: 48px;
+            letter-spacing: -0.02em;
+        }
+        .testimonial-card {
+            max-width: 640px;
+            margin: 0 auto;
+        }
+        .testimonial-quote-icon {
+            font-size: 36px;
+            color: #D1D5DB;
+            margin-bottom: 20px;
+        }
+        .testimonial-text {
+            font-size: 18px;
+            font-weight: 500;
+            line-height: 1.7;
+            margin-bottom: 28px;
+        }
+        .testimonial-author {
+            font-size: 16px;
+            font-weight: 700;
+        }
+        .testimonial-role {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+        .testimonial-nav {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 600px;
+            margin-top: -120px;
+            position: relative;
+        }
+        .testimonial-nav button {
+            background: none;
+            border: 1px solid #E5E7EB;
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 18px;
+            color: var(--text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: border-color 0.2s;
+        }
+        .testimonial-nav button:hover { border-color: var(--text); color: var(--text); }
+
+        /* ─── FAQ ─── */
+        .faq {
+            background: var(--bg-grey);
+            padding: 80px 24px;
+        }
+        .faq-inner {
+            max-width: 680px;
+            margin: 0 auto;
+        }
+        .faq h2 {
+            font-size: clamp(28px, 4vw, 44px);
+            font-weight: 900;
+            margin-bottom: 48px;
+            letter-spacing: -0.02em;
+        }
+        .faq-item {
+            border-bottom: 1px solid #E5E7EB;
+            padding: 20px 0;
+        }
+        .faq-question {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            background: none;
+            border: none;
+            width: 100%;
+            text-align: left;
+            color: var(--text);
+            font-family: inherit;
+            padding: 4px 0;
         }
-        footer .links { display: flex; gap: 24px; }
-        footer a {
-            font-size: 14px;
-            color: #8a7e5a;
-            text-decoration: none;
+        .faq-question:hover { color: var(--text-secondary); }
+        .faq-chevron {
+            font-size: 20px;
+            transition: transform 0.3s;
+            color: var(--text-secondary);
         }
-        footer a:hover { color: #26200a; }
-        footer .copy { font-size: 13px; color: #bbb; }
-
-        /* Background emoji scatter */
-        .emoji-bg {
-            position: fixed;
-            top: 0; left: 0; right: 0; bottom: 0;
-            pointer-events: none;
+        .faq-item.open .faq-chevron { transform: rotate(180deg); }
+        .faq-answer {
+            max-height: 0;
             overflow: hidden;
-            z-index: 0;
+            transition: max-height 0.3s ease, padding 0.3s ease;
         }
-        .emoji-bg span {
-            position: absolute;
-            opacity: 0.06;
-            user-select: none;
+        .faq-item.open .faq-answer {
+            max-height: 200px;
+            padding-top: 12px;
         }
-        body > *:not(.emoji-bg) {
-            position: relative;
-            z-index: 1;
+        .faq-answer p {
+            font-size: 15px;
+            color: var(--text-secondary);
+            line-height: 1.7;
         }
 
-        /* Mobile */
+        /* ─── FOOTER ─── */
+        footer {
+            padding: 48px 24px;
+            max-width: var(--max-width);
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 24px;
+        }
+        .footer-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 8px;
+        }
+        .footer-brand-icon {
+            width: 32px;
+            height: 32px;
+            background: var(--yellow);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+        }
+        .footer-brand span {
+            font-size: 16px;
+            font-weight: 800;
+        }
+        .footer-left p {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-top: 4px;
+        }
+        .footer-links {
+            display: flex;
+            gap: 24px;
+        }
+        .footer-links a {
+            font-size: 14px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.2s;
+        }
+        .footer-links a:hover { color: var(--text); }
+
+        /* ─── RESPONSIVE ─── */
         @media (max-width: 768px) {
-            nav { padding: 20px 24px; }
-            .hero {
-                flex-direction: column-reverse;
-                text-align: center;
-                padding: 20px 24px 40px;
-                gap: 32px;
-            }
-            .hero-text { max-width: 100%; }
-            .hero-character .monster { width: 200px; }
-            .features { padding: 40px 24px; grid-template-columns: repeat(2, 1fr); gap: 16px; }
-            .feature .feature-img { width: 72px; height: 72px; }
-            .feature .feature-img-row img { width: 40px; height: 40px; }
-            footer {
-                padding: 20px 24px;
-                flex-direction: column;
-                gap: 12px;
-                text-align: center;
-            }
-            footer .links { flex-wrap: wrap; justify-content: center; }
+            .hero { padding: 60px 20px 40px; }
+            .screenshots-row { justify-content: flex-start; padding: 0 20px; }
+            .phone-frame { width: 180px; }
+            .phone-content { min-height: 300px; padding: 16px 12px 20px; }
+            .features-grid { grid-template-columns: 1fr; }
+            .testimonial-nav { gap: 280px; margin-top: -80px; }
+            footer { flex-direction: column; text-align: center; align-items: center; }
+            .footer-links { justify-content: center; }
         }
     </style>
 </head>
 <body>
-    <div class="emoji-bg">
-        <span style="font-size:180px; top:2%; left:5%; transform:rotate(-22deg);">🥛</span>
-        <span style="font-size:160px; top:8%; right:8%; transform:rotate(15deg);">🍞</span>
-        <span style="font-size:140px; top:25%; left:2%; transform:rotate(12deg);">🧀</span>
-        <span style="font-size:200px; top:18%; right:2%; transform:rotate(-28deg);">🥚</span>
-        <span style="font-size:150px; top:40%; left:8%; transform:rotate(-10deg);">🍎</span>
-        <span style="font-size:170px; top:45%; right:5%; transform:rotate(20deg);">🥦</span>
-        <span style="font-size:130px; top:58%; left:3%; transform:rotate(25deg);">🍗</span>
-        <span style="font-size:190px; top:55%; right:10%; transform:rotate(-18deg);">🧃</span>
-        <span style="font-size:160px; top:72%; left:10%; transform:rotate(-30deg);">🥩</span>
-        <span style="font-size:140px; top:70%; right:3%; transform:rotate(8deg);">🧈</span>
-        <span style="font-size:180px; top:85%; left:5%; transform:rotate(18deg);">🥫</span>
-        <span style="font-size:150px; top:88%; right:8%; transform:rotate(-12deg);">🍋</span>
-        <span style="font-size:120px; top:35%; left:45%; transform:rotate(-15deg);">🛒</span>
-        <span style="font-size:110px; top:65%; left:40%; transform:rotate(22deg);">🧾</span>
+
+<!-- NAV -->
+<nav>
+    <div class="nav-inner">
+        <a href="/" class="nav-brand">
+            <div class="nav-icon">🛒</div>
+            <span>Supermonster</span>
+        </a>
+        <a href="https://apps.apple.com/app/supermonster" class="nav-cta">Download now</a>
     </div>
+</nav>
 
-    <nav>
-        <img src="monster-receipt.png" alt="Supermonster" class="logo">
-        <span class="name">Supermonster</span>
-    </nav>
-
-    <main class="hero">
-        <div class="hero-text">
-            <h1>Know where your <span>grocery money</span> goes</h1>
-            <p>Scan receipts, track prices, compare stores, and set budgets — all in one app. Your monster grows as you save.</p>
-            <a href="https://apps.apple.com/app/supermonster-grocery-tracker/idYOUR_APP_ID" class="cta">Download on the App Store</a>
-        </div>
-        <div class="hero-character">
-            <img src="monster-basket.png" alt="Supermonster character holding a basket of groceries" class="monster">
-        </div>
-    </main>
-
-    <section class="features">
-        <div class="feature">
-            <img src="monster-mascot.png" alt="Monster scanning a receipt" class="feature-img">
-            <h3>Scan any receipt</h3>
-            <p>Point your camera at a grocery receipt and Supermonster reads every item, price, and total instantly.</p>
-        </div>
-        <div class="feature">
-            <img src="monster-chester.png" alt="Chester tracking price charts" class="feature-img">
-            <h3>Track price inflation</h3>
-            <p>See when your regular items go up or down. Spot inflation before it hits your budget.</p>
-        </div>
-        <div class="feature">
-            <img src="monster-fuzzy.png" alt="Fuzzy with a shopping bag" class="feature-img">
-            <h3>Compare stores</h3>
-            <p>Find out which supermarket is cheapest for the things you actually buy, based on your own data.</p>
-        </div>
-        <div class="feature">
-            <img src="monster-grumpus.png" alt="Grumpus with a budget list" class="feature-img">
-            <h3>Set budgets</h3>
-            <p>Weekly or monthly budgets with real-time pacing. Get alerted before you overspend, not after.</p>
-        </div>
-        <div class="feature">
-            <img src="monster-wally.png" alt="Wally with a shopping list" class="feature-img">
-            <h3>Shopping lists</h3>
-            <p>Build lists, share them with your household, and check off items as you shop. Widget included.</p>
-        </div>
-        <div class="feature">
-            <img src="monster-pixel.png" alt="Pixel with a phone" class="feature-img">
-            <h3>Complete quests</h3>
-            <p>Your monster sets weekly challenges — find a cheaper alternative, stick to your budget, try a new store. Earn XP as you go.</p>
-        </div>
-        <div class="feature">
-            <img src="monster-mascot.png" alt="Mascot monster" class="feature-img">
-            <h3>Share with household</h3>
-            <p>Link accounts with a partner or housemate. See each other's trips, share shopping lists, and track spending together.</p>
-        </div>
-        <div class="feature">
-            <div class="feature-img-row">
-                <img src="monster-blobby.png" alt="Blobby">
-                <img src="monster-fluffbert.png" alt="Fluffbert">
-                <img src="monster-basket.png" alt="Basket monster">
+<!-- HERO -->
+<section class="hero">
+    <div class="hero-icon">🛒</div>
+    <div class="hero-label">Supermonster</div>
+    <h1>Track food prices. Save as a household.</h1>
+    <p>Scan any receipt, spot price rises on your regular items, set household budgets, and complete quests to level up your monster.</p>
+    <div class="store-badges">
+        <a href="https://apps.apple.com/app/supermonster" class="store-badge">
+            <svg viewBox="0 0 24 24"><path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/></svg>
+            <div class="store-badge-text">
+                <small>Download on the</small>
+                <strong>App Store</strong>
             </div>
-            <h3>Grow your monster</h3>
-            <p>Your monster levels up as you scan and save. Eight characters to choose from, each with its own personality.</p>
-        </div>
-    </section>
+        </a>
+    </div>
+</section>
 
-    <footer>
-        <div class="links">
-            <a href="/privacy">Privacy Policy</a>
-            <a href="/terms">Terms & Conditions</a>
-            <a href="/support">Support</a>
+<!-- SCREENSHOTS -->
+<section class="screenshots">
+    <div class="screenshots-row">
+        <div class="phone-frame">
+            <div class="phone-notch"><div class="phone-notch-pill"></div></div>
+            <div class="phone-content">
+                <div class="phone-emoji">📸</div>
+                <h3>Scan any receipt</h3>
+                <p>Point your camera at any shop receipt. Every item and price extracted in seconds.</p>
+            </div>
         </div>
-        <span class="copy">&copy; 2026 Supermonster</span>
-    </footer>
+        <div class="phone-frame">
+            <div class="phone-notch"><div class="phone-notch-pill"></div></div>
+            <div class="phone-content">
+                <div class="phone-emoji">📈</div>
+                <h3>Track price changes</h3>
+                <p>See which items went up or down since your last shop. Stay on top of inflation.</p>
+            </div>
+        </div>
+        <div class="phone-frame">
+            <div class="phone-notch"><div class="phone-notch-pill"></div></div>
+            <div class="phone-content">
+                <div class="phone-emoji">🎯</div>
+                <h3>Set household budgets</h3>
+                <p>Weekly or monthly budgets shared with your household. Track progress together.</p>
+            </div>
+        </div>
+        <div class="phone-frame">
+            <div class="phone-notch"><div class="phone-notch-pill"></div></div>
+            <div class="phone-content">
+                <div class="phone-emoji">🛒</div>
+                <h3>Shopping lists</h3>
+                <p>Shared lists that sync in real time. See what your partner added or checked off.</p>
+            </div>
+        </div>
+        <div class="phone-frame">
+            <div class="phone-notch"><div class="phone-notch-pill"></div></div>
+            <div class="phone-content">
+                <div class="phone-emoji">⚔️</div>
+                <h3>Quests & levelling</h3>
+                <p>Weekly challenges keep you on track. Hit targets and level up your monster.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features">
+    <h2>Everything you need to save on groceries</h2>
+    <div class="features-grid">
+        <div class="feature-card">
+            <h3>Instant receipt scanning</h3>
+            <p>Point your camera at any supermarket receipt. Supermonster reads every item, price, and discount in seconds using AI.</p>
+            <div class="feature-card-img">🧾</div>
+        </div>
+        <div class="feature-card">
+            <h3>Price tracking over time</h3>
+            <p>See exactly which items have gone up or down since your last shop. Know whether your weekly spend is rising — and why.</p>
+            <div class="feature-card-img">📊</div>
+        </div>
+        <div class="feature-card">
+            <h3>Household sharing</h3>
+            <p>Link with your partner or family. Shared shopping lists, combined spending view, and household budgets — all synced in real time.</p>
+            <div class="feature-card-img">👨‍👩‍👧</div>
+        </div>
+        <div class="feature-card">
+            <h3>Smart shopping lists</h3>
+            <p>Create shared lists with your household. Supermonster suggests your regular items and tracks what you've checked off.</p>
+            <div class="feature-card-img">📋</div>
+        </div>
+        <div class="feature-card">
+            <h3>Budget goals</h3>
+            <p>Set weekly or monthly budgets for your whole shop or specific categories. Get warnings when you're close to the limit.</p>
+            <div class="feature-card-img">💰</div>
+        </div>
+        <div class="feature-card">
+            <h3>Quests & levelling</h3>
+            <p>Complete weekly spending challenges, earn XP, and evolve your monster from Newbie to Money Monster across 10 levels.</p>
+            <div class="feature-card-img">🏆</div>
+        </div>
+    </div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="testimonials">
+    <h2>What our users are saying</h2>
+    <div class="testimonial-card" id="testimonial-card">
+        <div class="testimonial-quote-icon">❝</div>
+        <p class="testimonial-text" id="testimonial-text">We had no idea how much we were spending on groceries until Supermonster showed us. Saved over £200 in the first month just by being more aware.</p>
+        <div class="testimonial-author" id="testimonial-author">Sarah & Tom</div>
+        <div class="testimonial-role" id="testimonial-role">Household of 4, Manchester</div>
+    </div>
+    <div class="testimonial-nav">
+        <button onclick="prevTestimonial()" aria-label="Previous">←</button>
+        <button onclick="nextTestimonial()" aria-label="Next">→</button>
+    </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq">
+    <div class="faq-inner">
+        <h2>Frequently Asked Questions</h2>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                What is Supermonster?
+                <span class="faq-chevron">⌵</span>
+            </button>
+            <div class="faq-answer">
+                <p>Supermonster is a grocery spending tracker for households. Scan your receipts, track food price changes over time, set budgets, and share shopping lists with your family — all while levelling up a fun monster character.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                How does receipt scanning work?
+                <span class="faq-chevron">⌵</span>
+            </button>
+            <div class="faq-answer">
+                <p>Point your camera at any supermarket receipt. Our AI reads every item name, price, and discount automatically. It takes just a few seconds and works with receipts from any UK supermarket.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                Is Supermonster free?
+                <span class="faq-chevron">⌵</span>
+            </button>
+            <div class="faq-answer">
+                <p>Supermonster is free to download with a generous number of monthly scans included. For unlimited scanning and advanced features, there's an optional subscription.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                Can I share with my partner?
+                <span class="faq-chevron">⌵</span>
+            </button>
+            <div class="faq-answer">
+                <p>Yes! Create a household and share a code with your partner. You'll both see shared shopping lists, combined spending data, and household budgets — all synced in real time.</p>
+            </div>
+        </div>
+
+        <div class="faq-item">
+            <button class="faq-question" onclick="toggleFaq(this)">
+                Is my data private?
+                <span class="faq-chevron">⌵</span>
+            </button>
+            <div class="faq-answer">
+                <p>Your personal data is never shared. You can optionally opt in to share anonymised shopping data to help build better price insights for everyone, but this is entirely your choice and can be changed anytime in Settings.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+    <div class="footer-left">
+        <div class="footer-brand">
+            <div class="footer-brand-icon">🛒</div>
+            <span>Supermonster</span>
+        </div>
+        <p>Track food prices. Save as a household.</p>
+        <p style="margin-top: 8px;">Built with ❤️ by the Supermonster team</p>
+        <p style="margin-top: 4px; font-size: 13px; color: #9CA3AF;">Copyright © 2026 Supermonster. All rights reserved.</p>
+    </div>
+    <div class="footer-links">
+        <a href="/privacy">Privacy Policy</a>
+        <a href="/terms">Terms of Use</a>
+        <a href="/support">Support</a>
+    </div>
+</footer>
+
+<script>
+// Testimonials carousel
+const testimonials = [
+    {
+        text: "We had no idea how much we were spending on groceries until Supermonster showed us. Saved over £200 in the first month just by being more aware.",
+        author: "Sarah & Tom",
+        role: "Household of 4, Manchester"
+    },
+    {
+        text: "The price tracking is brilliant. I can actually see when my regular items have gone up and switch to cheaper alternatives. It's like having a shopping assistant.",
+        author: "James",
+        role: "Weekly shopper, London"
+    },
+    {
+        text: "My kids love the monster and the quests. It's turned our family budgeting into a game. We actually look forward to scanning receipts now!",
+        author: "Rachel",
+        role: "Mum of 3, Birmingham"
+    }
+];
+
+let currentTestimonial = 0;
+
+function showTestimonial(index) {
+    const t = testimonials[index];
+    document.getElementById('testimonial-text').textContent = t.text;
+    document.getElementById('testimonial-author').textContent = t.author;
+    document.getElementById('testimonial-role').textContent = t.role;
+}
+
+function nextTestimonial() {
+    currentTestimonial = (currentTestimonial + 1) % testimonials.length;
+    showTestimonial(currentTestimonial);
+}
+
+function prevTestimonial() {
+    currentTestimonial = (currentTestimonial - 1 + testimonials.length) % testimonials.length;
+    showTestimonial(currentTestimonial);
+}
+
+// FAQ accordion
+function toggleFaq(button) {
+    const item = button.parentElement;
+    const wasOpen = item.classList.contains('open');
+    // Close all
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    // Toggle clicked
+    if (!wasOpen) item.classList.add('open');
+}
+</script>
+
 </body>
 </html>
